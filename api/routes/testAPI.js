@@ -6,7 +6,6 @@ var artist = '';
 
 router.use(bodyParser.json());
 
-//TODO: Send GET request to external API after receiving data in POST request
 router.post('/', function(req, res){
   res.send('TEST');
   console.log(req.body);
@@ -21,7 +20,7 @@ router.get("/", function(req, res, next){
       'method': 'GET',
       'url': 'https://api.spotify.com/v1/search?q='+artist+'&type=artist',
       'headers': {
-        'Authorization': 'Bearer BQAGErpxyGUwQVtuiaVOGafwI8bucWGFyPL5W9xcBXuh-U1_FwEnDVskyHo9w1I4HjmJS0w5jO1G9Lc-GbM'
+        'Authorization': 'Bearer BQC1mzXrAH85y1v1VxyB_ud0W8ulraz9TgzK-jc_3aPJUYPpVl8SrT0EBgQulJnveJy9HdSfleDpP7Fp_hM'
       }
     };
     request(options, function (error, res) {
