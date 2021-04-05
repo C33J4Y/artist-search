@@ -3,15 +3,18 @@ var router = express.Router();
 var request = require('request');
 var bodyParser = require('body-parser');
 var artist = '';
+var token = '';
 
 router.use(bodyParser.json());
 
 router.post('/', function(req, res){
-  res.send('TEST');
+  res.send('POST Request Successful');
   console.log(req.body);
   artist = req.body.artistName;
+  token = req.body.token;
  
-  //console.log(artist);
+  console.log(artist);
+  console.log(token);
 });
 
 router.get("/", function(req, res, next){
@@ -20,7 +23,7 @@ router.get("/", function(req, res, next){
       'method': 'GET',
       'url': 'https://api.spotify.com/v1/search?q='+artist+'&type=artist',
       'headers': {
-        'Authorization': 'Bearer BQC1mzXrAH85y1v1VxyB_ud0W8ulraz9TgzK-jc_3aPJUYPpVl8SrT0EBgQulJnveJy9HdSfleDpP7Fp_hM'
+        'Authorization': 'Bearer ' + token
       }
     };
     request(options, function (error, res) {

@@ -3,26 +3,45 @@ import './App.css';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
-import logo from './logo.png';
+import logo from './logo1.png';
 
 
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {artists: [],
-                  artistName: ''};
+                  artistName: '',
+                  token: ''};
   }
 
-  //TODO: Send POST Request for token
+  
+  getToken(){
+    fetch('https://accounts.spotify.com/api/token',{
+        method: 'POST',
+        headers:{
+          'Content-Type':'application/x-www-form-urlencoded',
+          'Authorization': 'Basic MTk4OTIyNzE0ZGI1NGVjZTlhZGU5NzUzOTA3ZDcyM2I6Yjc3Y2ZiNTNjNjMzNGVmN2JlMTdhN2Y1MDU2NzZjOTY='
+        },
+        body:'grant_type=client_credentials'
+      })
+      .then(response => response.json())
+      .then(data => {
+        this.setState({token:data.access_token});
+        console.log(this.state.token);
+      });
 
+    }
+    
   async sendQuery(){
+    
     try{
       let result = await fetch('http://localhost:9000/testAPI',{
         method: 'POST',
         headers:{
           'Content-Type':'application/json'
         },
-        body:JSON.stringify({artistName: this.state.artistName})
+        body:JSON.stringify({artistName: this.state.artistName,
+                             token: this.state.token})
 
       });
      this.callAPI();
@@ -44,16 +63,14 @@ class App extends React.Component {
     .catch(console.log)
   }
 
-  
-  // componentDidMount(){
-  //   this.callAPI();
-  // }
+  componentDidMount(){
+    this.getToken();
+  }
  
-//TODO: Fix key errors when rendering response from API
   render (){
    return(
      <div className="App">
-     <img clasName="Logo" src={logo} alt="Logo"/>
+     <img className="Logo" src={logo} alt="Logo"/>
       <TextField
        className="input-field"
        type="text"
@@ -71,7 +88,7 @@ class App extends React.Component {
        {/* <h1>{this.state.artistName}</h1> */}
        <ul className="results-list">
           {this.state.artists.map(items =>
-       <li> <a className="artist-link" key="{items}" href={items.external_urls.spotify} target="_blank" rel="noreferrer">{items.name}</a></li>)}
+       <li key={items.id}> <a className="artist-link"  href={items.external_urls.spotify} target="_blank" rel="noreferrer">{items.name}</a></li>)}
        </ul>
     </div>
     );
