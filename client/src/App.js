@@ -35,7 +35,7 @@ class App extends React.Component {
   async sendQuery(){
     
     try{
-      let result = await fetch('http://localhost:9000/testAPI',{
+      let result = await fetch('https://react-node-restapi-app.herokuapp.com/testAPI',{
         method: 'POST',
         headers:{
           'Content-Type':'application/json'
@@ -54,7 +54,7 @@ class App extends React.Component {
   }
 
   callAPI(){
-    fetch("http://localhost:9000/testAPI")
+    fetch("https://react-node-restapi-app.herokuapp.com/testAPI")
     .then(res => res.json())
     .then((data) => {
         this.setState({artists: data.artists.items})
