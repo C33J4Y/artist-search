@@ -21,7 +21,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -50,7 +50,7 @@ if (process.env.NODE_ENV === "production") {
    app.use(express.static(path.join(__dirname, 'client/build')));
    // Handle React routing, return all requests to React app
      app.get('*', function(req, res) {
-       res.sendFile(path.join(__dirname+'client/build/index.html'));
+       res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
      });
 }
 
