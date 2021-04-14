@@ -3,8 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www && client",
-    "client":"cd client && npm start"
+    "start": "node ./bin/www && npm start"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
