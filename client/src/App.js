@@ -11,7 +11,8 @@ class App extends React.Component {
     super(props);
     this.state = {artists: [],
                   artistName: '',
-                  token: ''};
+                  token: '',
+                  calledAPI: false};
   }
 
   
@@ -52,13 +53,15 @@ class App extends React.Component {
     }
     
   }
-
+//TODO: Alert user that results are loading
+//TODO: Alert users when there are NO results
+//TODO: Handle empty input
   callAPI(){
     fetch("https://react-node-restapi-app.herokuapp.com/testAPI")
     .then(res => res.json())
     .then((data) => {
-        this.setState({artists: data.artists.items})
-        console.log(this.state.artists)
+        this.setState({artists: data.artists.items});
+        this.setState({calledAPI: true});
     })
     .catch(console.log)
   }
@@ -70,27 +73,29 @@ class App extends React.Component {
   render (){
    return(
      <div className="App">
-     <img className="Logo" src={logo} alt="Logo"/>
-      <TextField
-       className="input-field"
-       type="text"
-       id="outlined-secondary"
-       placeholder="Search Artists"
-       color="primary"
-       variant="outlined"
-       onChange={event =>this.setState({artistName : event.target.value})}
-       />
-       <Button className="input-button"
-               variant="contained" 
-               startIcon={<SearchIcon />}
-               size="large" 
-               type="submit" onClick={() => this.sendQuery()}>Search</Button>
-       {/* <h1>{this.state.artistName}</h1> */}
-       <ul className="results-list">
-          {this.state.artists.map(items =>
-       <li key={items.id}> <a className="artist-link"  href={items.external_urls.spotify} target="_blank" rel="noreferrer">{items.name}</a></li>)}
-       </ul>
-    </div>
+        <img className="Logo" src={logo} alt="Logo"/>
+          <TextField
+          className="input-field"
+          type="text"
+          id="outlined-secondary"
+          placeholder="Search Artists"
+          color="primary"
+          variant="outlined"
+          onChange={event =>this.setState({artistName : event.target.value})}
+          />
+          <Button className="input-button"
+                  variant="contained" 
+                  startIcon={<SearchIcon />}
+                  size="large" 
+                  type="submit" onClick={() => this.sendQuery()}>Search</Button>
+          {/* <h1>{this.state.artistName}</h1> */}
+          <ul className="results-list">
+              {(this.state.artists.length === 0 && this.state.calledAPI === true) ? <h3>"Artist Not Found"</h3> 
+              : this.state.artists.map(items =>
+              <li key={items.id}> <a className="artist-link"  href={items.external_urls.spotify} target="_blank" rel="noreferrer">{items.name}</a>
+              </li>)}
+          </ul>
+      </div>
     );
   }
 }
