@@ -53,9 +53,7 @@ class App extends React.Component {
     }
     
   }
-//TODO: Alert user that results are loading
-//TODO: Alert users when there are NO results
-//TODO: Handle empty input
+
   callAPI(){
     fetch("https://react-node-restapi-app.herokuapp.com/testAPI")
     .then(res => res.json())
@@ -88,7 +86,6 @@ class App extends React.Component {
                   startIcon={<SearchIcon />}
                   size="large" 
                   type="submit" onClick={() => this.sendQuery()}>Search</Button>
-          {/* <h1>{this.state.artistName}</h1> */}
           <ul className="results-list">
               {(this.state.artists.length === 0 && this.state.calledAPI === true) ? <h3>"Artist Not Found"</h3> 
               : this.state.artists.map(items =>
