@@ -4,17 +4,19 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import SearchIcon from '@material-ui/icons/Search';
 import logo from './logo1.png';
+import Loader from 'react-loader-spinner';
 
-
+//TODO: Handle empty input
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {artists: [],
                   artistName: '',
                   token: '',
-                  calledAPI: false};
+                  calledAPI: false,
+                  isLoading: false};
   }
-
+   
   
   getToken(){
     fetch('https://accounts.spotify.com/api/token',{
@@ -28,12 +30,13 @@ class App extends React.Component {
       .then(response => response.json())
       .then(data => {
         this.setState({token:data.access_token});
-        console.log(this.state.token);
       });
 
     }
+
     
   async sendQuery(){
+    this.setState({isLoading: true});
     
     try{
       let result = await fetch('https://react-node-restapi-app.herokuapp.com/testAPI',{
@@ -54,12 +57,15 @@ class App extends React.Component {
     
   }
 
+
   callAPI(){
+    
     fetch("https://react-node-restapi-app.herokuapp.com/testAPI")
     .then(res => res.json())
     .then((data) => {
         this.setState({artists: data.artists.items});
         this.setState({calledAPI: true});
+        this.setState({isLoading: false});
     })
     .catch(console.log)
   }
@@ -67,6 +73,7 @@ class App extends React.Component {
   componentDidMount(){
     this.getToken();
   }
+  
  
   render (){
    return(
@@ -86,12 +93,22 @@ class App extends React.Component {
                   startIcon={<SearchIcon />}
                   size="large" 
                   type="submit" onClick={() => this.sendQuery()}>Search</Button>
-          <ul className="results-list">
-              {(this.state.artists.length === 0 && this.state.calledAPI === true) ? <h3>"Artist Not Found"</h3> 
-              : this.state.artists.map(items =>
-              <li key={items.id}> <a className="artist-link"  href={items.external_urls.spotify} target="_blank" rel="noreferrer">{items.name}</a>
-              </li>)}
-          </ul>
+                  {this.state.isLoading ? <div>
+                                              <Loader color="#ffff"/>
+                                              <h4>Loading</h4>
+                                          </div> : 
+                  
+                                <ul className="results-list">
+                                {(this.state.artists.length === 0 && this.state.calledAPI === true) ? <h3>"Artist Not Found"</h3> 
+                                      : this.state.artists.map(items =>
+                                      <li key={items.id}> <a className="artist-link"  
+                                                              href={items.external_urls.spotify} 
+                                                              target="_blank" 
+                                                              rel="noreferrer">{items.name}
+                                                          </a>
+                                      </li>)}
+                                </ul>
+                  }
       </div>
     );
   }
