@@ -6,7 +6,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import logo from './logo1.png';
 import Loader from 'react-loader-spinner';
 
-//TODO: Handle empty input
+
 class App extends React.Component {
   constructor(props){
     super(props);
@@ -17,7 +17,7 @@ class App extends React.Component {
                   isLoading: false};
   }
    
-  
+
   getToken(){
     fetch('https://accounts.spotify.com/api/token',{
         method: 'POST',
@@ -36,6 +36,8 @@ class App extends React.Component {
 
     
   async sendQuery(){
+    
+    this.state.artistName === '' ? alert('Please enter an artist') : 
     this.setState({isLoading: true});
     
     try{
@@ -61,6 +63,7 @@ class App extends React.Component {
   callAPI(){
     
     fetch("https://react-node-restapi-app.herokuapp.com/testAPI")
+    .then(this.handleErrors)
     .then(res => res.json())
     .then((data) => {
         this.setState({artists: data.artists.items});
